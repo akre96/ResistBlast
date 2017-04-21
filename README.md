@@ -2,10 +2,10 @@
  data and run a blast search to determine what species it may have come from. Returns a CSV file of the data.
 
 USAGE: 
- python resParse.py [HTM_FILE] [CONTIG_FILE] [SAMPLE_ID] [NUMBER_OF_MATCHES] [IDENTITY_THRESHOLD]
+ python resParse.py [HTM_FILE] [CONTIG_FILE] [SAMPLE_ID] [NUMBER_OF_MATCHES] [IDENTITY_THRESHOLD] [OUT_DIR]
 
 EXAMPLE: 
- python /home/sakre/projects/Res_BLAST/resParse.py test.htm final.contigs.fa DMDT001A 3 .9
+ python /home/sakre/projects/Res_BLAST/resParse.py test.htm final.contigs.fa DMDT001A 3 .9 /home/sakre/projects/Res_BLAST
 
 NOTES:
  Make sure to load biopython module, other dependencies are already loaded on the Farm

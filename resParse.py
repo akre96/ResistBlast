@@ -9,10 +9,10 @@ import csv
 # data and run a blast search to determine what species it may have come from. Returns a CSV file of the data.
 
 #USAGE: 
-# python resParse.py [HTM_FILE] [CONTIG_FILE] [SAMPLE_ID] [NUMBER_OF_MATCHES] [IDENTITY_THRESHOLD]
+# python resParse.py [HTM_FILE] [CONTIG_FILE] [SAMPLE_ID] [NUMBER_OF_MATCHES] [IDENTITY_THRESHOLD] [OUT-DIR]
 
 #EXAMPLE: 
-# python /home/sakre/resParse.py test.htm final.contigs.fa DMDT001A 3 .9
+# python /home/sakre/projects/Res_BLAST/resParse.py test.htm final.contigs.fa DMDT001A 3 .9 /home/sakre/projects/Res_BLAST
 
 #NOTES:
 # Make sure to load biopython module, other dependencies are already loaded on the Farm
@@ -27,13 +27,14 @@ CONTIG_FILE=sys.argv[2]
 SAMPLE_ID=sys.argv[3]
 NUMBER_OF_MATCHES=int(sys.argv[4])
 IDENTITY_THRESHOLD=int(sys.argv[5])
+OUT_DIR=sys.argv[6]
 
 # Checking all inputs entered
 if (HTM_FILE && CONTIG_FILE && SAMPLE_ID && NUMBER_OF_MATCHES && IDENTITY_THRESHOLD):
 	print 'Running Script on Sample ID: '+SAMPLE_ID
 else:
 	print 'Error: Missing Values'
-	print 'format: python resParse.py [HTM_FILE] [CONTIG_FILE] [SAMPLE_ID] [NUMBER_OF_MATCHES] [IDENTITY_THRESHOLD]'
+	print 'format: python resParse.py [HTM_FILE] [CONTIG_FILE] [SAMPLE_ID] [NUMBER_OF_MATCHES] [IDENTITY_THRESHOLD] [OUT_DIR]'
 
 #Adds Antiobiotic Resistance contigs to an array 'contigs'
 print 'parsing htm file...'
@@ -86,7 +87,7 @@ print'done.'
 
 #Writes results to a CSV File
 k=0
-with open(SAMPLE_ID+'_contig_blast.csv','wb') as csvfile:
+with open(OUT_DIR+'/'+SAMPLE_ID+'_contig_blast.csv','wb') as csvfile:
 	datawriter=csv.writer(csvfile)
 	datawriter.writerow(['Sample','Resistance','Gene','Fasta Header']+['[Species,identity]']*NUMBER_OF_MATCHES)
 
@@ -103,7 +104,7 @@ with open(SAMPLE_ID+'_contig_blast.csv','wb') as csvfile:
 		
 
 		matches=0
-
+		#Parses blast result for matches greater than the identity threshold
 		for align in blast_record.alignments:
 			if matches<NUMBER_OF_MATCHES:
 				hsps=align.hsps
