@@ -5,7 +5,7 @@ USAGE:
  python resParse.py [HTM_FILE] [CONTIG_FILE] [SAMPLE_ID] [NUMBER_OF_MATCHES] [IDENTITY_THRESHOLD]
 
 EXAMPLE: 
- python /home/sakre/resParse.py test.htm final.contigs.fa DMDT001A 3 .9
+ python /home/sakre/projects/Res_BLAST/resParse.py test.htm final.contigs.fa DMDT001A 3 .9
 
 NOTES:
  Make sure to load biopython module, other dependencies are already loaded on the Farm
