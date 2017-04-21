@@ -84,41 +84,41 @@ for j,cont in enumerate(contigs):
 		i=i+1
 print'done.'
 
-#Runs a blast search on each contig returning an array of format: [Sample,Drug,Gene,Sequence Header, [Species,identity]]
+#Writes results to a CSV File
 k=0
-for cont in contigs:
-	print 'starting blast search number '+str(k)+' id: '+cont[3]+'...'
-	fasta_string = cont[4]
-	result_handle = NCBIWWW.qblast("blastn", "nt", fasta_string)
-	contigs[k].pop() #removing sequence itself from result array
-	print'done.'		
-
-	print 'parsing result...'
-	blast_record = NCBIXML.read(result_handle)
-	
-
-	matches=0
-
-	for align in blast_record.alignments:
-		if matches<NUMBER_OF_MATCHES:
-			hsps=align.hsps
-			identities=hsps[0].identities
-			aLen=hsps[0].align_length
-			identity=float(identities)/float(aLen)
-			if identity>IDENTITY_THRESHOLD:
-				matches=matches+1
-				contigs[k].append([str(align.title),identity])
-	k=k+1
-	print 'done.'
-
-#Writes 'contigs' array to a csv file		
-print 'writing to csv file...'
-
 with open(SAMPLE_ID+'_contig_blast.csv','wb') as csvfile:
 	datawriter=csv.writer(csvfile)
 	datawriter.writerow(['Sample','Resistance','Gene','Fasta Header']+['[Species,identity]']*NUMBER_OF_MATCHES)
-	for row in contigs:
-		datawriter.writerow(row)
 
-	
-print 'done'
+	#Runs a blast search on each contig returning an array of format: [Sample,Drug,Gene,Sequence Header, [Species,identity]]
+	for cont in contigs:
+		print 'starting blast search number '+str(k)+' id: '+cont[3]+'...'
+		fasta_string = cont[4]
+		result_handle = NCBIWWW.qblast("blastn", "nt", fasta_string)
+		contigs[k].pop() #removing sequence itself from result array
+		print'done.'		
+
+		print 'parsing result...'
+		blast_record = NCBIXML.read(result_handle)
+		
+
+		matches=0
+
+		for align in blast_record.alignments:
+			if matches<NUMBER_OF_MATCHES:
+				hsps=align.hsps
+				identities=hsps[0].identities
+				aLen=hsps[0].align_length
+				identity=float(identities)/float(aLen)
+				if identity>IDENTITY_THRESHOLD:
+					matches=matches+1
+					contigs[k].append([str(align.title),identity])
+		print 'done.'
+
+		print 'writing to csv file'
+		datawriter.writerow(contigs[k])
+		print 'done'
+		k=k+1
+		
+
+
