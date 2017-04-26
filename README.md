@@ -1,4 +1,6 @@
 
+ # Antibiotic Resistance Parser
+
  This script is intended to match potential antibiotic resistance found in WGS sample to the sequence in the WGS 
  data and run a blast search to determine what species it may have come from. Returns a CSV file of the data. Designed for use at the Mills Lab @ UC Davis.
 
@@ -17,6 +19,6 @@
  Currently runs on the NCBI database so I do not suggest running too many of these in parallel in order to not overload their servers
 
 
-Sincerely,
-Samir Akre
+Sincerely, <br>
+Samir Akre <br>
 [www.samirakre.com](http://www.samirakre.com)	
