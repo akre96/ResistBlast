@@ -10,6 +10,8 @@
 ## Example: 
  python /home/sakre/projects/Res_BLAST/resParse.py test.htm final.contigs.fa DMDT001A 3 .9 /home/sakre/projects/Res_BLAST
 
+ Example bash file to run script titled 'resParse.sh'
+
 ## Notes:
  Make sure to load biopython module, other dependencies are already loaded on the Farm
  Include full path to files needed
