@@ -26,11 +26,11 @@ HTM_FILE=sys.argv[1]
 CONTIG_FILE=sys.argv[2]
 SAMPLE_ID=sys.argv[3]
 NUMBER_OF_MATCHES=int(sys.argv[4])
-IDENTITY_THRESHOLD=int(sys.argv[5])
+IDENTITY_THRESHOLD=float(sys.argv[5])
 OUT_DIR=sys.argv[6]
 
 # Checking all inputs entered
-if (HTM_FILE && CONTIG_FILE && SAMPLE_ID && NUMBER_OF_MATCHES && IDENTITY_THRESHOLD):
+if (HTM_FILE and CONTIG_FILE and SAMPLE_ID and NUMBER_OF_MATCHES and IDENTITY_THRESHOLD and OUT_DIR):
 	print 'Running Script on Sample ID: '+SAMPLE_ID
 else:
 	print 'Error: Missing Values'
@@ -85,7 +85,7 @@ for j,cont in enumerate(contigs):
 		i=i+1
 print'done.'
 
-#Writes results to a CSV File
+#Writes result of blast search to a CSV File
 k=0
 with open(OUT_DIR+'/'+SAMPLE_ID+'_contig_blast.csv','wb') as csvfile:
 	datawriter=csv.writer(csvfile)

@@ -1,3 +1,7 @@
-./final.contigs.fa
-./result.txt
-./test.htm
+final.contigs.fa
+result.txt
+test.htm
+venv
+*.csv
+*.sh
+
