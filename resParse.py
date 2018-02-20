@@ -34,15 +34,15 @@ if (HTM_FILE and CONTIG_FILE and SAMPLE_ID and NUMBER_OF_MATCHES and IDENTITY_TH
 	print 'Running Script on Sample ID: '+SAMPLE_ID
 else:
 	print 'Error: Missing Values'
-	print 'format: python resParse.py [HTM_FILE] [CONTIG_FILE] [SAMPLE_ID] [NUMBER_OF_MATCHES] [IDENTITY_THRESHOLD] [OUT_DIR]'
+	print 'Format: python resParse.py [HTM_FILE] [CONTIG_FILE] [SAMPLE_ID] [NUMBER_OF_MATCHES] [IDENTITY_THRESHOLD] [OUT_DIR]'
 
 #Adds Antiobiotic Resistance contigs to an array 'contigs'
-print 'parsing htm file...'
+print 'Parsing htm file ...'
 with open(HTM_FILE,'r') as html_doc:
 	soup = BeautifulSoup(html_doc, 'html.parser')
 
 	results=[]
-	tables=soup.find_all(class_="results")
+	tables=soup.find_all(class_="virresults")
 	i=0
 	for t in tables:
 		tempTable=[]
@@ -54,6 +54,7 @@ with open(HTM_FILE,'r') as html_doc:
 			tmp=[x.string for x in tmp]
 			tempTable.append(tmp)
 		results.append(tempTable)
+                print(tempTable)
 		i=i+1
 	data=[]
 	for i in results:
@@ -66,24 +67,24 @@ with open(HTM_FILE,'r') as html_doc:
 		for gene in res[2:]:
 				#array format: Sample,Drug,Gene,Sequence Header
 				contigs.append([SAMPLE_ID,str(drug[0]),str(gene[0]),str(gene[3])])
-print 'done.'
+print 'Done'
 
 #Reads data from contigs file to array 'data'
-print'reading contig file..'
+print'reading contig file ...'
 with open(CONTIG_FILE,'r') as file:
 	data=file.readlines()
-print'done'
+print'Done'
 
 #Adds contig sequences to contig array by searching for the header
-print 'sorting contigs...'
+print 'Sorting contigs ...'
 for j,cont in enumerate(contigs):	
-	pat=re.compile(cont[3])
+	pat=re.compile(cont[3]+' ')
 	i=0
 	for line in data:
 		if(pat.search(line)):
 			contigs[j].append(data[i]+data[i+1])
 		i=i+1
-print'done.'
+print'Done.'
 
 #Writes result of blast search to a CSV File
 k=0
@@ -93,13 +94,13 @@ with open(OUT_DIR+'/'+SAMPLE_ID+'_contig_blast.csv','wb') as csvfile:
 
 	#Runs a blast search on each contig returning an array of format: [Sample,Drug,Gene,Sequence Header, [Species,identity]]
 	for cont in contigs:
-		print 'starting blast search number '+str(k)+' id: '+cont[3]+'...'
+		print 'Starting blast search number '+str(k)+' On Contig ID: '+cont[3]+' ...'
 		fasta_string = cont[4]
 		result_handle = NCBIWWW.qblast("blastn", "nt", fasta_string)
 		contigs[k].pop() #removing sequence itself from result array
-		print'done.'		
+		print'Done.'		
 
-		print 'parsing result...'
+		print 'Parsing result ...'
 		blast_record = NCBIXML.read(result_handle)
 		
 
@@ -114,11 +115,11 @@ with open(OUT_DIR+'/'+SAMPLE_ID+'_contig_blast.csv','wb') as csvfile:
 				if identity>IDENTITY_THRESHOLD:
 					matches=matches+1
 					contigs[k].append([str(align.title),identity])
-		print 'done.'
+		print 'Done.'
 
-		print 'writing to csv file'
+		print 'Writing to csv file ...'
 		datawriter.writerow(contigs[k])
-		print 'done'
+		print 'Done'
 		k=k+1
 		
 
